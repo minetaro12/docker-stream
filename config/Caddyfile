@@ -1,0 +1,9 @@
+:80 {
+  root * /web
+  file_server
+
+  handle_path /stream/* {
+    root * /hls
+    file_server
+  }
+}

@@ -1,0 +1,13 @@
+services:
+  server:
+    build: .
+    ports:
+      - "8080:80"
+    devices:
+      - "/dev/video0:/dev/video0"
+    volumes:
+      - type: tmpfs
+        target: /hls
+        tmpfs:
+          size: 100m
+    restart: always

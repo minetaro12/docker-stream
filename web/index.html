@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>HLS Client Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+    }
+
+    .hide {
+      display: none;
+    }
+    
+    #play {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .video-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100svh;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="video-container">
+    <button id="play">Play</button>
+    <video id="video" class="hide"></video>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.querySelector("#video")
+    const videoSrc = "stream/list.m3u8"
+    const playButton = document.querySelector("#play")
+
+    playButton.addEventListener("click", () => {
+      video.classList.remove("hide")
+      playButton.classList.add("hide")
+
+      if (Hls.isSupported()) {
+        const hls = new Hls()
+        hls.loadSource(videoSrc)
+        hls.attachMedia(video)
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play()
+        })
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = videoSrc
+        video.addEventListener("loadedmetadata", function () {
+          video.play()
+        })
+      } else {
+        alert("Your browser does not support HLS.")
+      }
+    })
+  </script>
+</body>
+
+</html>
